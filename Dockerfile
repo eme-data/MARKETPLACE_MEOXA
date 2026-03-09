@@ -17,7 +17,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Generate Prisma client
+# Generate Prisma client (Prisma 7: output in src/generated/prisma/)
 RUN npx prisma generate
 
 # Build the application
@@ -40,16 +40,8 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Copy Prisma files for migrations
-COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /app/prisma.config.ts ./prisma.config.ts
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
-COPY --from=builder /app/node_modules/prisma ./node_modules/prisma
+# Copy Prisma generated client (Prisma 7 generates here, not in node_modules/.prisma)
 COPY --from=builder /app/src/generated ./src/generated
-
-# Copy seed dependencies
-COPY --from=builder /app/package.json ./package.json
 
 USER nextjs
 
