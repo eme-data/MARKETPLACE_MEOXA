@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Footer() {
   return (
@@ -7,7 +8,16 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="col-span-1">
-            <span className="text-meoxa-orange font-bold text-2xl">MEOXA</span>
+            <div className="flex items-center gap-2">
+              <Image
+                src="/logo-meoxa.jpg"
+                alt="MEOXA"
+                width={36}
+                height={28}
+                className="h-7 w-auto"
+              />
+              <span className="text-white font-bold text-xl">MEOXA</span>
+            </div>
             <p className="text-white/60 mt-3 text-sm leading-relaxed">
               Marketplace de logiciels innovants. Des solutions IA pour
               optimiser votre activit&eacute;.

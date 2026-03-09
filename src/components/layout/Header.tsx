@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useSession, signOut } from "next-auth/react";
 import { useState } from "react";
 
@@ -14,10 +15,17 @@ export default function Header() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <span className="text-meoxa-orange font-bold text-2xl tracking-tight">
+            <Image
+              src="/logo-meoxa.jpg"
+              alt="MEOXA"
+              width={40}
+              height={32}
+              className="h-8 w-auto"
+            />
+            <span className="text-white font-bold text-lg tracking-tight">
               MEOXA
             </span>
-            <span className="text-white text-sm font-light hidden sm:inline">
+            <span className="text-white/60 text-sm font-light hidden sm:inline">
               Marketplace
             </span>
           </Link>
