@@ -1,0 +1,72 @@
+version: "3.8"
+
+services:
+  # ========================
+  # PostgreSQL Database
+  # ========================
+  db:
+    image: postgres:16-alpine
+    container_name: meoxa-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-meoxa}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-meoxa_secure_password}
+      POSTGRES_DB: ${POSTGRES_DB:-meoxa_marketplace}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-meoxa} -d ${POSTGRES_DB:-meoxa_marketplace}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ========================
+  # Next.js Application
+  # ========================
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: meoxa-app
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-3000}:3000"
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-meoxa}:${POSTGRES_PASSWORD:-meoxa_secure_password}@db:5432/${POSTGRES_DB:-meoxa_marketplace}
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:3000}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
+      STRIPE_PUBLISHABLE_KEY: ${STRIPE_PUBLISHABLE_KEY}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+      EMAIL_FROM: ${EMAIL_FROM:-MEOXA Marketplace <noreply@meoxa.fr>}
+      NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
+      NEXT_PUBLIC_APP_NAME: ${NEXT_PUBLIC_APP_NAME:-MEOXA Marketplace}
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # ========================
+  # Prisma Migrations (run once)
+  # ========================
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile.migrate
+    container_name: meoxa-migrate
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-meoxa}:${POSTGRES_PASSWORD:-meoxa_secure_password}@db:5432/${POSTGRES_DB:-meoxa_marketplace}
+    depends_on:
+      db:
+        condition: service_healthy
+    profiles:
+      - setup
+
+volumes:
+  postgres_data:
+    driver: local

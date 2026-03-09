@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #1a1a2e;
+  --meoxa-blue: #0B1B42;
+  --meoxa-blue-light: #132d6b;
+  --meoxa-orange: #F36C21;
+  --meoxa-orange-hover: #d95b19;
+  --meoxa-gray: #f8f9fa;
+  --meoxa-gray-dark: #6b7280;
+  --meoxa-border: #e5e7eb;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-meoxa-blue: var(--meoxa-blue);
+  --color-meoxa-blue-light: var(--meoxa-blue-light);
+  --color-meoxa-orange: var(--meoxa-orange);
+  --color-meoxa-orange-hover: var(--meoxa-orange-hover);
+  --color-meoxa-gray: var(--meoxa-gray);
+  --color-meoxa-gray-dark: var(--meoxa-gray-dark);
+  --color-meoxa-border: var(--meoxa-border);
+  --font-sans: "Inter", sans-serif;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "Inter", sans-serif;
+}
+
+/* Gradient text effect like meoxa.fr */
+.gradient-text {
+  background: linear-gradient(135deg, var(--meoxa-blue), var(--meoxa-orange));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--meoxa-gray);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--meoxa-blue);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--meoxa-blue-light);
+}
