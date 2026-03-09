@@ -16,7 +16,7 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
             <Image
-              src="/logo-meoxa.jpg"
+              src="/logo-meoxa.svg"
               alt="MEOXA"
               width={40}
               height={32}

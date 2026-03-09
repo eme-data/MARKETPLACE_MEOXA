@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 180" fill="none">
+  <defs>
+    <linearGradient id="grad1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#F36C21"/>
+      <stop offset="50%" stop-color="#E8520E"/>
+      <stop offset="100%" stop-color="#F38C21"/>
+    </linearGradient>
+  </defs>
+
+  <!-- M left vertical stroke (white) -->
+  <polygon points="20,10 38,10 38,170 20,170" fill="white"/>
+
+  <!-- M left diagonal up-right (white) -->
+  <polygon points="20,170 38,170 95,40 78,40" fill="white"/>
+
+  <!-- Center V down-left (orange gradient) - overlaps M -->
+  <polygon points="78,10 96,10 38,145 20,145" fill="url(#grad1)"/>
+
+  <!-- Center V down-right to up-right (orange gradient) -->
+  <polygon points="96,10 114,10 175,145 157,145" fill="url(#grad1)"/>
+
+  <!-- X right diagonal up (orange gradient) -->
+  <polygon points="140,10 158,10 220,170 202,170" fill="url(#grad1)"/>
+
+  <!-- X right diagonal crossing (white) - goes behind/over -->
+  <polygon points="157,145 175,145 220,10 202,10" fill="white"/>
+</svg>

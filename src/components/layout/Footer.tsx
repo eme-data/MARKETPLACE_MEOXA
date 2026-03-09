@@ -10,7 +10,7 @@ export default function Footer() {
           <div className="col-span-1">
             <div className="flex items-center gap-2">
               <Image
-                src="/logo-meoxa.jpg"
+                src="/logo-meoxa.svg"
                 alt="MEOXA"
                 width={36}
                 height={28}
