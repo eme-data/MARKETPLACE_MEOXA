@@ -61,8 +61,38 @@ case "${1:-help}" in
             exit 1
         fi
         echo "Installation du certificat SSL pour $2..."
-        sudo apt-get install -y certbot python3-certbot-nginx
-        sudo sed -i "s/server_name _;/server_name $2;/" /etc/nginx/sites-available/meoxa-marketplace
+        sudo apt-get install -y nginx certbot python3-certbot-nginx
+
+        # Creer la config Nginx si elle n'existe pas
+        if [ ! -f /etc/nginx/sites-available/meoxa-marketplace ]; then
+            echo "Creation de la configuration Nginx..."
+            sudo tee /etc/nginx/sites-available/meoxa-marketplace > /dev/null << 'NGINX_CONF'
+server {
+    listen 80;
+    server_name _;
+
+    client_max_body_size 50M;
+
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+        proxy_read_timeout 86400;
+    }
+}
+NGINX_CONF
+            sudo ln -sf /etc/nginx/sites-available/meoxa-marketplace /etc/nginx/sites-enabled/
+            sudo rm -f /etc/nginx/sites-enabled/default
+        fi
+
+        sudo sed -i "s/server_name .*;/server_name $2;/" /etc/nginx/sites-available/meoxa-marketplace
+        sudo nginx -t && sudo systemctl restart nginx
         sudo certbot --nginx -d "$2" --non-interactive --agree-tos --email "admin@$2"
         echo "SSL installe pour $2"
         ;;
